@@ -127,6 +127,30 @@ th, td {
   padding: 8px;
 }
 
+.row-selected {
+  background: #e9f2ff;
+}
+
+.ticket-action-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.action-panel h4,
+.history-panel h4 {
+  margin-top: 0;
+}
+
+.action-panel input {
+  margin-bottom: 8px;
+}
+
+.history-panel {
+  margin-top: 16px;
+}
+
 .error {
   color: #b91c1c;
 }
