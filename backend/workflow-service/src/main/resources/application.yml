@@ -1,0 +1,6 @@
+server:
+  port: ${CCMS_WORKFLOW_PORT:8085}
+
+spring:
+  application:
+    name: ccms-workflow-service

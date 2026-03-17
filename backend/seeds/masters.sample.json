@@ -1,0 +1,31 @@
+{
+  "exams": [
+    { "code": "JEE_MAIN", "name": "JEE Main" },
+    { "code": "NEET_UG", "name": "NEET UG" },
+    { "code": "CUET_UG", "name": "CUET UG" }
+  ],
+  "categories": [
+    { "code": "ADMIT_CARD", "name": "Admit Card" },
+    { "code": "PAYMENT", "name": "Payment" },
+    { "code": "APPLICATION_CORRECTION", "name": "Application Correction" },
+    { "code": "RESULT", "name": "Result" }
+  ],
+  "subCategories": [
+    { "categoryCode": "ADMIT_CARD", "code": "DOWNLOAD_ISSUE", "name": "Download Issue" },
+    { "categoryCode": "PAYMENT", "code": "PAYMENT_FAILED", "name": "Payment Failed" },
+    { "categoryCode": "APPLICATION_CORRECTION", "code": "DATA_UPDATE", "name": "Data Update" },
+    { "categoryCode": "RESULT", "code": "RESULT_MISMATCH", "name": "Result Mismatch" }
+  ],
+  "ticketStatuses": [
+    "NEW",
+    "IN_PROGRESS",
+    "PENDING_INFO_FROM_CANDIDATE",
+    "RESOLVED_BY_AGENT",
+    "UNRESOLVED",
+    "ESCALATED_TO_OFFICER",
+    "UNDER_OFFICER_REVIEW",
+    "FINAL_RESOLVED",
+    "REOPENED",
+    "CLOSED"
+  ]
+}

@@ -1,0 +1,6 @@
+server:
+  port: ${CCMS_AUTH_PORT:8081}
+
+spring:
+  application:
+    name: ccms-auth-access-service

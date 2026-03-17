@@ -1,0 +1,6 @@
+server:
+  port: ${CCMS_MASTER_PORT:8082}
+
+spring:
+  application:
+    name: ccms-master-data-service

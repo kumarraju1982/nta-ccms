@@ -1,0 +1,6 @@
+server:
+  port: ${CCMS_TICKET_PORT:8087}
+
+spring:
+  application:
+    name: ccms-ticket-service
