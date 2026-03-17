@@ -21,6 +21,24 @@ mvn -f apps/nta-ccms/backend/workflow-service/pom.xml spring-boot:run
 mvn -f apps/nta-ccms/backend/ticket-service/pom.xml spring-boot:run
 ```
 
+## 2.1 PostgreSQL Requirement for Ticket Service
+
+Create database:
+
+```sql
+CREATE DATABASE nta_ccms;
+```
+
+Ticket service DB variables (optional, defaults shown):
+
+```env
+CCMS_TICKET_DB_URL=jdbc:postgresql://localhost:5432/nta_ccms
+CCMS_TICKET_DB_USERNAME=postgres
+CCMS_TICKET_DB_PASSWORD=postgres
+```
+
+Flyway runs automatically on startup for `ticket-service`.
+
 ## 3. Frontend Configuration
 
 Create `.env` in `apps/nta-ccms/frontend` based on `.env.example`.
@@ -63,6 +81,30 @@ npm run dev
 3. View dashboard exam count
 4. Open tickets page
 5. Create a Candidate ticket and verify it appears in list
+
+## 5.1 Workflow API Smoke Calls
+
+Assign:
+
+```bash
+curl -X POST http://localhost:8087/api/v1/tickets/GRV-2026-0001/assign \
+  -H "Content-Type: application/json" \
+  -d "{\"assignedAgent\":\"agent1\",\"assignedOfficer\":\"officer1\",\"actionBy\":\"team-lead\"}"
+```
+
+Transition:
+
+```bash
+curl -X POST http://localhost:8087/api/v1/tickets/GRV-2026-0001/transition \
+  -H "Content-Type: application/json" \
+  -d "{\"toStatus\":\"IN_PROGRESS\",\"actionBy\":\"agent1\",\"remarks\":\"Started review\"}"
+```
+
+History:
+
+```bash
+curl http://localhost:8087/api/v1/tickets/GRV-2026-0001/history
+```
 
 ## 6. Seed Data
 

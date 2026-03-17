@@ -4,3 +4,17 @@ server:
 spring:
   application:
     name: ccms-ticket-service
+  datasource:
+    url: ${CCMS_TICKET_DB_URL:jdbc:postgresql://localhost:5432/nta_ccms}
+    username: ${CCMS_TICKET_DB_USERNAME:postgres}
+    password: ${CCMS_TICKET_DB_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  flyway:
+    enabled: true
+    baseline-on-migrate: true

@@ -1,0 +1,14 @@
+package org.nta.ccms.ticket.domain;
+
+public enum TicketStatus {
+  NEW,
+  IN_PROGRESS,
+  PENDING_INFO_FROM_CANDIDATE,
+  RESOLVED_BY_AGENT,
+  UNRESOLVED,
+  ESCALATED_TO_OFFICER,
+  UNDER_OFFICER_REVIEW,
+  FINAL_RESOLVED,
+  REOPENED,
+  CLOSED
+}
