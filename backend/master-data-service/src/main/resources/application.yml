@@ -9,7 +9,7 @@ ccms:
   digit:
     mdms:
       base-url: ${CCMS_DIGIT_MDMS_BASE_URL:http://localhost:8099/mdms-v2}
-      search-path: ${CCMS_DIGIT_MDMS_SEARCH_PATH:/v1/_search}
+      search-path: ${CCMS_DIGIT_MDMS_SEARCH_PATH:/v1/mdms}
       tenant-id: ${CCMS_TENANT_ID:pb.amritsar}
       module-name: ${CCMS_MDMS_MODULE_NAME:ccms}
       exams-master: ${CCMS_MDMS_EXAMS_MASTER:exams}

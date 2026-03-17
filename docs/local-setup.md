@@ -29,13 +29,13 @@ Set these before starting services:
 CCMS_TENANT_ID=pb.amritsar
 
 CCMS_DIGIT_AUTH_BASE_URL=http://localhost:8080
-CCMS_DIGIT_AUTH_TOKEN_PATH=/keycloak/realms/egov/protocol/openid-connect/token
-CCMS_DIGIT_AUTH_USERINFO_PATH=/keycloak/realms/egov/protocol/openid-connect/userinfo
-CCMS_DIGIT_AUTH_CLIENT_ID=digit-ui
+CCMS_DIGIT_AUTH_TOKEN_PATH=/keycloak/realms/master/protocol/openid-connect/token
+CCMS_DIGIT_AUTH_USERINFO_PATH=/keycloak/realms/master/protocol/openid-connect/userinfo
+CCMS_DIGIT_AUTH_CLIENT_ID=admin-cli
 CCMS_DIGIT_AUTH_CLIENT_SECRET=
 
 CCMS_DIGIT_MDMS_BASE_URL=http://localhost:8099/mdms-v2
-CCMS_DIGIT_MDMS_SEARCH_PATH=/v1/_search
+CCMS_DIGIT_MDMS_SEARCH_PATH=/v1/mdms
 CCMS_MDMS_MODULE_NAME=ccms
 CCMS_MDMS_EXAMS_MASTER=exams
 CCMS_MDMS_CATEGORIES_MASTER=queryCategories
@@ -53,6 +53,12 @@ CCMS_DIGIT_NOTIFICATION_TEMPLATE_ID=ccms-ticket-status
 
 Note: `ticket-service` sends `toStatus` as DIGIT workflow `action`. Ensure DIGIT process actions are configured with matching names.
 
+Run one-time local DIGIT bootstrap (creates CCMS workflow + MDMS masters):
+
+```bash
+powershell -ExecutionPolicy Bypass -File apps/nta-ccms/scripts/bootstrap-digit-local.ps1
+```
+
 ## 2.1 PostgreSQL Requirement for Ticket Service
 
 Create database:
@@ -64,9 +70,9 @@ CREATE DATABASE nta_ccms;
 Ticket service DB variables (optional, defaults shown):
 
 ```env
-CCMS_TICKET_DB_URL=jdbc:postgresql://localhost:5432/nta_ccms
+CCMS_TICKET_DB_URL=jdbc:postgresql://localhost:5434/nta_ccms
 CCMS_TICKET_DB_USERNAME=postgres
-CCMS_TICKET_DB_PASSWORD=postgres
+CCMS_TICKET_DB_PASSWORD=password
 ```
 
 Flyway runs automatically on startup for `ticket-service`.
@@ -109,7 +115,7 @@ npm run dev
 ## 5. Baseline Flow
 
 1. Open frontend `http://localhost:3000`
-2. Login with DIGIT-authenticated username/password
+2. Login with DIGIT-authenticated username/password (local default: `admin` / `admin`)
 3. View dashboard exam count
 4. Open tickets page
 5. Create a Candidate ticket and verify it appears in list

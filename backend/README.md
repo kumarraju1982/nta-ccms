@@ -22,9 +22,9 @@ This backend is structured as DIGIT-style logical services that can run independ
 
 Environment variables:
 
-- `CCMS_TICKET_DB_URL` (default `jdbc:postgresql://localhost:5432/nta_ccms`)
+- `CCMS_TICKET_DB_URL` (default `jdbc:postgresql://localhost:5432/nta_ccms`; DIGIT local usually `localhost:5434`)
 - `CCMS_TICKET_DB_USERNAME` (default `postgres`)
-- `CCMS_TICKET_DB_PASSWORD` (default `postgres`)
+- `CCMS_TICKET_DB_PASSWORD` (default `postgres`; DIGIT local usually `password`)
 
 Flyway migrations are in:
 
@@ -45,6 +45,12 @@ Flyway migrations are in:
 - `master-data-service`: reads exams/categories from DIGIT MDMS.
 - `ticket-service`: initializes and transitions workflow via DIGIT workflow engine.
 - `ticket-service`: optional DIGIT notification trigger on create/transition.
+
+For DIGIT local bootstrap (workflow process + MDMS seeds), run:
+
+```bash
+powershell -ExecutionPolicy Bypass -File apps/nta-ccms/scripts/bootstrap-digit-local.ps1
+```
 
 ## Build
 

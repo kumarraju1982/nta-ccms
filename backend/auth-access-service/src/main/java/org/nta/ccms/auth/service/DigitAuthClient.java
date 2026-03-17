@@ -30,6 +30,7 @@ public class DigitAuthClient {
     body.add("username", username);
     body.add("password", password);
     body.add("client_id", properties.getClientId());
+    body.add("scope", "openid");
     if (properties.getClientSecret() != null && !properties.getClientSecret().isBlank()) {
       body.add("client_secret", properties.getClientSecret());
     }

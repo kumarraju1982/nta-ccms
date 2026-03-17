@@ -38,17 +38,17 @@ public class TicketController {
   }
 
   @PostMapping("/tickets/{grievanceId}/assign")
-  public ResponseEntity<TicketResponse> assign(@PathVariable String grievanceId, @RequestBody AssignTicketRequest request) {
+  public ResponseEntity<TicketResponse> assign(@PathVariable("grievanceId") String grievanceId, @RequestBody AssignTicketRequest request) {
     return ResponseEntity.ok(ticketDomainService.assign(grievanceId, request));
   }
 
   @PostMapping("/tickets/{grievanceId}/transition")
-  public ResponseEntity<TicketResponse> transition(@PathVariable String grievanceId, @Valid @RequestBody TransitionTicketRequest request) {
+  public ResponseEntity<TicketResponse> transition(@PathVariable("grievanceId") String grievanceId, @Valid @RequestBody TransitionTicketRequest request) {
     return ResponseEntity.ok(ticketDomainService.transition(grievanceId, request));
   }
 
   @GetMapping("/tickets/{grievanceId}/history")
-  public ResponseEntity<List<TicketHistoryResponse>> history(@PathVariable String grievanceId) {
+  public ResponseEntity<List<TicketHistoryResponse>> history(@PathVariable("grievanceId") String grievanceId) {
     return ResponseEntity.ok(ticketDomainService.history(grievanceId));
   }
 

@@ -4,12 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import org.nta.ccms.master.config.MdmsProperties;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 
@@ -62,24 +63,17 @@ public class MdmsClient {
 
   @SuppressWarnings("unchecked")
   private Map<String, Object> mdmsSearch(String masterName) {
-    Map<String, Object> payload = Map.of(
-        "MdmsCriteria", Map.of(
-            "tenantId", properties.getTenantId(),
-            "moduleDetails", List.of(
-                Map.of(
-                    "moduleName", properties.getModuleName(),
-                    "masterDetails", List.of(Map.of("name", masterName))
-                )
-            )
-        )
-    );
-
+    String url = UriComponentsBuilder
+        .fromHttpUrl(resolveUrl(properties.getSearchPath()))
+        .queryParam("moduleName", properties.getModuleName())
+        .queryParam("masterName", masterName)
+        .build()
+        .toUriString();
     HttpHeaders headers = new HttpHeaders();
-    headers.setContentType(MediaType.APPLICATION_JSON);
     headers.set("X-Tenant-ID", properties.getTenantId());
-    headers.set("X-Client-Id", "nta-ccms");
+    headers.set("X-Client-ID", "nta-ccms");
     try {
-      ResponseEntity<Map> response = restTemplate.postForEntity(resolveUrl(properties.getSearchPath()), new HttpEntity<>(payload, headers), Map.class);
+      ResponseEntity<Map> response = restTemplate.exchange(url, HttpMethod.GET, new HttpEntity<>(headers), Map.class);
       return response.getBody() == null ? Map.of() : response.getBody();
     } catch (Exception ex) {
       throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "MDMS search failed: " + ex.getMessage());
