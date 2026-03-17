@@ -10,6 +10,8 @@ import org.nta.ccms.ticket.api.CreateTicketRequest;
 import org.nta.ccms.ticket.api.TicketHistoryResponse;
 import org.nta.ccms.ticket.api.TicketResponse;
 import org.nta.ccms.ticket.api.TransitionTicketRequest;
+import org.nta.ccms.ticket.integration.DigitNotificationClient;
+import org.nta.ccms.ticket.integration.DigitWorkflowClient;
 import org.nta.ccms.ticket.domain.TicketEntity;
 import org.nta.ccms.ticket.domain.TicketHistoryEntity;
 import org.nta.ccms.ticket.domain.TicketStatus;
@@ -44,10 +46,19 @@ public class TicketDomainService {
 
   private final TicketRepository ticketRepository;
   private final TicketHistoryRepository ticketHistoryRepository;
+  private final DigitWorkflowClient digitWorkflowClient;
+  private final DigitNotificationClient digitNotificationClient;
 
-  public TicketDomainService(TicketRepository ticketRepository, TicketHistoryRepository ticketHistoryRepository) {
+  public TicketDomainService(
+      TicketRepository ticketRepository,
+      TicketHistoryRepository ticketHistoryRepository,
+      DigitWorkflowClient digitWorkflowClient,
+      DigitNotificationClient digitNotificationClient
+  ) {
     this.ticketRepository = ticketRepository;
     this.ticketHistoryRepository = ticketHistoryRepository;
+    this.digitWorkflowClient = digitWorkflowClient;
+    this.digitNotificationClient = digitNotificationClient;
   }
 
   @Transactional(readOnly = true)
@@ -79,8 +90,14 @@ public class TicketDomainService {
     OffsetDateTime now = OffsetDateTime.now();
     entity.setCreatedAt(now);
     entity.setUpdatedAt(now);
+
+    Map<String, Object> workflow = digitWorkflowClient.initWorkflow(entity.getGrievanceId());
+    entity.setWorkflowProcessId(stringOr(workflow.get("processId"), ""));
+    entity.setWorkflowInstanceId(stringOr(workflow.get("id"), ""));
+
     TicketEntity saved = ticketRepository.save(entity);
     writeHistory(saved, "NA", saved.getStatus().name(), "CREATED", "SYSTEM", "Ticket created");
+    digitNotificationClient.sendTicketStatusUpdate(saved.getCandidateMobile(), saved.getGrievanceId(), saved.getStatus().name());
     return toResponse(saved);
   }
 
@@ -111,6 +128,20 @@ public class TicketDomainService {
       throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid transition from " + from + " to " + to);
     }
 
+    String workflowAction = request.toStatus();
+
+    if (ticket.getWorkflowProcessId() == null || ticket.getWorkflowProcessId().isBlank()
+        || ticket.getWorkflowInstanceId() == null || ticket.getWorkflowInstanceId().isBlank()) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Ticket is missing workflow linkage");
+    }
+
+    digitWorkflowClient.transitionWorkflow(
+        ticket.getWorkflowProcessId(),
+        ticket.getWorkflowInstanceId(),
+        ticket.getGrievanceId(),
+        workflowAction
+    );
+
     if (to == TicketStatus.REOPENED) {
       ticket.setReopenCount(ticket.getReopenCount() + 1);
     }
@@ -119,6 +150,7 @@ public class TicketDomainService {
     ticket.setUpdatedAt(OffsetDateTime.now());
     TicketEntity saved = ticketRepository.save(ticket);
     writeHistory(saved, from.name(), to.name(), "TRANSITION", request.actionBy(), request.remarks());
+    digitNotificationClient.sendTicketStatusUpdate(saved.getCandidateMobile(), saved.getGrievanceId(), saved.getStatus().name());
     return toResponse(saved);
   }
 
@@ -178,5 +210,9 @@ public class TicketDomainService {
 
   private String emptyTo(String value, String fallback) {
     return value == null || value.isBlank() ? fallback : value;
+  }
+
+  private String stringOr(Object value, String fallback) {
+    return value == null ? fallback : String.valueOf(value);
   }
 }

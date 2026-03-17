@@ -4,3 +4,12 @@ server:
 spring:
   application:
     name: ccms-auth-access-service
+
+ccms:
+  digit:
+    auth:
+      base-url: ${CCMS_DIGIT_AUTH_BASE_URL:http://localhost:8080}
+      token-path: ${CCMS_DIGIT_AUTH_TOKEN_PATH:/keycloak/realms/egov/protocol/openid-connect/token}
+      user-info-path: ${CCMS_DIGIT_AUTH_USERINFO_PATH:/keycloak/realms/egov/protocol/openid-connect/userinfo}
+      client-id: ${CCMS_DIGIT_AUTH_CLIENT_ID:digit-ui}
+      client-secret: ${CCMS_DIGIT_AUTH_CLIENT_SECRET:}

@@ -21,6 +21,38 @@ mvn -f apps/nta-ccms/backend/workflow-service/pom.xml spring-boot:run
 mvn -f apps/nta-ccms/backend/ticket-service/pom.xml spring-boot:run
 ```
 
+## 2.0 DIGIT Integration Variables (Required)
+
+Set these before starting services:
+
+```env
+CCMS_TENANT_ID=pb.amritsar
+
+CCMS_DIGIT_AUTH_BASE_URL=http://localhost:8080
+CCMS_DIGIT_AUTH_TOKEN_PATH=/keycloak/realms/egov/protocol/openid-connect/token
+CCMS_DIGIT_AUTH_USERINFO_PATH=/keycloak/realms/egov/protocol/openid-connect/userinfo
+CCMS_DIGIT_AUTH_CLIENT_ID=digit-ui
+CCMS_DIGIT_AUTH_CLIENT_SECRET=
+
+CCMS_DIGIT_MDMS_BASE_URL=http://localhost:8099/mdms-v2
+CCMS_DIGIT_MDMS_SEARCH_PATH=/v1/_search
+CCMS_MDMS_MODULE_NAME=ccms
+CCMS_MDMS_EXAMS_MASTER=exams
+CCMS_MDMS_CATEGORIES_MASTER=queryCategories
+
+CCMS_DIGIT_WORKFLOW_BASE_URL=http://localhost:8085/workflow
+CCMS_DIGIT_WORKFLOW_PROCESS_PATH=/v1/process
+CCMS_DIGIT_WORKFLOW_TRANSITION_PATH=/v1/transition
+CCMS_DIGIT_WORKFLOW_PROCESS_CODE=CCMS_TICKET
+
+CCMS_DIGIT_NOTIFICATION_ENABLED=false
+CCMS_DIGIT_NOTIFICATION_BASE_URL=http://localhost:8091/notification
+CCMS_DIGIT_NOTIFICATION_SMS_PATH=/v1/sms/send
+CCMS_DIGIT_NOTIFICATION_TEMPLATE_ID=ccms-ticket-status
+```
+
+Note: `ticket-service` sends `toStatus` as DIGIT workflow `action`. Ensure DIGIT process actions are configured with matching names.
+
 ## 2.1 PostgreSQL Requirement for Ticket Service
 
 Create database:
@@ -77,7 +109,7 @@ npm run dev
 ## 5. Baseline Flow
 
 1. Open frontend `http://localhost:3000`
-2. Login with any username/password (mock auth)
+2. Login with DIGIT-authenticated username/password
 3. View dashboard exam count
 4. Open tickets page
 5. Create a Candidate ticket and verify it appears in list

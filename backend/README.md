@@ -1,4 +1,4 @@
-# NTA CCMS Backend (DIGIT-Aligned)
+# NTA CCMS Backend (DIGIT-Integrated)
 
 This backend is structured as DIGIT-style logical services that can run independently on different ports.
 
@@ -16,6 +16,7 @@ This backend is structured as DIGIT-style logical services that can run independ
 - Business-facing term is `Candidate`.
 - Modules can run direct (local multi-port) or behind an API gateway.
 - `ticket-service` is PostgreSQL + Flyway backed.
+- Auth, MDMS, workflow, and notifications are integrated through DIGIT endpoints.
 
 ## Ticket Service Database
 
@@ -37,6 +38,13 @@ Flyway migrations are in:
 - `POST /api/v1/tickets/{grievanceId}/transition`
 - `GET /api/v1/tickets/{grievanceId}/history`
 - `GET /api/v1/tickets/officer-queue`
+
+## DIGIT Service Usage
+
+- `auth-access-service`: proxies password login and userinfo to DIGIT auth/Keycloak.
+- `master-data-service`: reads exams/categories from DIGIT MDMS.
+- `ticket-service`: initializes and transitions workflow via DIGIT workflow engine.
+- `ticket-service`: optional DIGIT notification trigger on create/transition.
 
 ## Build
 

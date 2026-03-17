@@ -2,6 +2,7 @@ package org.nta.ccms.workflow.controller;
 
 import java.util.Map;
 import java.util.Set;
+import org.nta.ccms.workflow.service.DigitWorkflowProxyClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,6 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/workflow")
 public class WorkflowController {
+  private final DigitWorkflowProxyClient digitWorkflowProxyClient;
+
+  public WorkflowController(DigitWorkflowProxyClient digitWorkflowProxyClient) {
+    this.digitWorkflowProxyClient = digitWorkflowProxyClient;
+  }
 
   private static final Set<String> VALID_STATUSES = Set.of(
       "NEW",
@@ -27,7 +33,7 @@ public class WorkflowController {
   );
 
   @PostMapping("/tickets/{grievanceId}/transition")
-  public ResponseEntity<Map<String, String>> transition(
+  public ResponseEntity<Map<String, Object>> transition(
       @PathVariable String grievanceId,
       @RequestBody Map<String, String> request
   ) {
@@ -38,10 +44,15 @@ public class WorkflowController {
           "grievanceId", grievanceId
       ));
     }
+
+    Map<String, Object> result = digitWorkflowProxyClient.transition(Map.of(
+        "entityId", grievanceId,
+        "action", toStatus
+    ));
     return ResponseEntity.ok(Map.of(
         "grievanceId", grievanceId,
-        "toStatus", toStatus,
-        "result", "accepted"
+        "requestedStatus", toStatus,
+        "digitResponse", result
     ));
   }
 }

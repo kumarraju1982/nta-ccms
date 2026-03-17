@@ -45,6 +45,12 @@ public class TicketEntity {
   @Column(name = "assigned_officer", length = 80)
   private String assignedOfficer;
 
+  @Column(name = "workflow_process_id", length = 80)
+  private String workflowProcessId;
+
+  @Column(name = "workflow_instance_id", length = 120)
+  private String workflowInstanceId;
+
   @Column(name = "source_channel", nullable = false, length = 32)
   private String sourceChannel;
 
@@ -139,6 +145,22 @@ public class TicketEntity {
 
   public void setSourceChannel(String sourceChannel) {
     this.sourceChannel = sourceChannel;
+  }
+
+  public String getWorkflowProcessId() {
+    return workflowProcessId;
+  }
+
+  public void setWorkflowProcessId(String workflowProcessId) {
+    this.workflowProcessId = workflowProcessId;
+  }
+
+  public String getWorkflowInstanceId() {
+    return workflowInstanceId;
+  }
+
+  public void setWorkflowInstanceId(String workflowInstanceId) {
+    this.workflowInstanceId = workflowInstanceId;
   }
 
   public int getReopenCount() {

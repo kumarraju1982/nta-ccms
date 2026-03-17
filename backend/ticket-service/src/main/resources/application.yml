@@ -18,3 +18,17 @@ spring:
   flyway:
     enabled: true
     baseline-on-migrate: true
+
+ccms:
+  digit:
+    tenant-id: ${CCMS_TENANT_ID:pb.amritsar}
+    workflow:
+      base-url: ${CCMS_DIGIT_WORKFLOW_BASE_URL:http://localhost:8085/workflow}
+      process-path: ${CCMS_DIGIT_WORKFLOW_PROCESS_PATH:/v1/process}
+      transition-path: ${CCMS_DIGIT_WORKFLOW_TRANSITION_PATH:/v1/transition}
+      process-code: ${CCMS_DIGIT_WORKFLOW_PROCESS_CODE:CCMS_TICKET}
+    notification:
+      enabled: ${CCMS_DIGIT_NOTIFICATION_ENABLED:false}
+      base-url: ${CCMS_DIGIT_NOTIFICATION_BASE_URL:http://localhost:8091/notification}
+      sms-path: ${CCMS_DIGIT_NOTIFICATION_SMS_PATH:/v1/sms/send}
+      template-id: ${CCMS_DIGIT_NOTIFICATION_TEMPLATE_ID:ccms-ticket-status}
