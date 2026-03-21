@@ -2,6 +2,10 @@
 
 Date: 2026-03-17
 
+Related reference:
+
+- `apps/nta-ccms/docs/digit-command-reference.md`
+
 ## 1. Services and Ports
 
 - Auth Access Service: `8081`
