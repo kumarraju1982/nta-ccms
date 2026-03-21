@@ -148,6 +148,12 @@ History:
 curl http://localhost:8087/api/v1/tickets/GRV-2026-0001/history
 ```
 
+## 5.2 One-Command End-to-End Smoke
+
+```bash
+powershell -ExecutionPolicy Bypass -File apps/nta-ccms/scripts/smoke-test-local.ps1
+```
+
 ## 6. Seed Data
 
 Master seed sample is available at:
