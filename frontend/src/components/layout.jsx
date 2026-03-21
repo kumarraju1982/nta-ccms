@@ -8,6 +8,7 @@ export default function Layout({ children }) {
         <nav>
           <Link to="/">Dashboard</Link>
           <Link to="/tickets">Tickets</Link>
+          <Link to="/officer">Officer Workspace</Link>
           <Link to="/admin/masters">Admin Masters</Link>
         </nav>
       </aside>

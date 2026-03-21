@@ -4,6 +4,7 @@ import java.util.List;
 import jakarta.validation.Valid;
 import org.nta.ccms.ticket.api.AssignTicketRequest;
 import org.nta.ccms.ticket.api.CreateTicketRequest;
+import org.nta.ccms.ticket.api.OfficerQueueSummaryResponse;
 import org.nta.ccms.ticket.api.TicketHistoryResponse;
 import org.nta.ccms.ticket.api.TicketResponse;
 import org.nta.ccms.ticket.api.TransitionTicketRequest;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -53,8 +55,18 @@ public class TicketController {
   }
 
   @GetMapping("/tickets/officer-queue")
-  public ResponseEntity<List<TicketResponse>> officerQueue() {
-    return ResponseEntity.ok(ticketDomainService.officerQueue());
+  public ResponseEntity<List<TicketResponse>> officerQueue(
+      @RequestParam(name = "assignedOfficer", required = false) String assignedOfficer,
+      @RequestParam(name = "status", required = false) String status
+  ) {
+    return ResponseEntity.ok(ticketDomainService.officerQueue(assignedOfficer, status));
+  }
+
+  @GetMapping("/tickets/officer-summary")
+  public ResponseEntity<OfficerQueueSummaryResponse> officerSummary(
+      @RequestParam(name = "assignedOfficer", required = false) String assignedOfficer
+  ) {
+    return ResponseEntity.ok(ticketDomainService.officerSummary(assignedOfficer));
   }
 
   @GetMapping("/health")

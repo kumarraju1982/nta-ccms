@@ -100,6 +100,12 @@ input {
   margin-top: 4px;
 }
 
+select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+}
+
 button {
   background: #0f4a8a;
   color: #fff;
@@ -153,6 +159,38 @@ th, td {
 
 .error {
   color: #b91c1c;
+}
+
+.officer-filter-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.kpi-card {
+  border: 1px solid #dbe1e8;
+  border-radius: 8px;
+  padding: 10px;
+  background: #f8fbff;
+}
+
+.kpi-card h4 {
+  margin: 0 0 4px;
+  font-size: 13px;
+}
+
+.kpi-card p {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
 }
 
 @media (max-width: 900px) {

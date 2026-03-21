@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.UUID;
 import org.nta.ccms.ticket.api.AssignTicketRequest;
 import org.nta.ccms.ticket.api.CreateTicketRequest;
+import org.nta.ccms.ticket.api.OfficerQueueSummaryResponse;
 import org.nta.ccms.ticket.api.TicketHistoryResponse;
 import org.nta.ccms.ticket.api.TicketResponse;
 import org.nta.ccms.ticket.api.TransitionTicketRequest;
@@ -73,6 +74,32 @@ public class TicketDomainService {
     return ticketRepository.findByStatusInOrderByUpdatedAtDesc(OFFICER_QUEUE_STATUSES.stream().toList()).stream()
         .map(this::toResponse)
         .toList();
+  }
+
+  @Transactional(readOnly = true)
+  public List<TicketResponse> officerQueue(String assignedOfficer, String status) {
+    return ticketRepository.findByStatusInOrderByUpdatedAtDesc(OFFICER_QUEUE_STATUSES.stream().toList()).stream()
+        .filter(item -> assignedOfficer == null || assignedOfficer.isBlank()
+            || assignedOfficer.equalsIgnoreCase(emptyTo(item.getAssignedOfficer(), "")))
+        .filter(item -> status == null || status.isBlank()
+            || item.getStatus().name().equalsIgnoreCase(status))
+        .map(this::toResponse)
+        .toList();
+  }
+
+  @Transactional(readOnly = true)
+  public OfficerQueueSummaryResponse officerSummary(String assignedOfficer) {
+    List<TicketEntity> queue = ticketRepository.findByStatusInOrderByUpdatedAtDesc(OFFICER_QUEUE_STATUSES.stream().toList()).stream()
+        .filter(item -> assignedOfficer == null || assignedOfficer.isBlank()
+            || assignedOfficer.equalsIgnoreCase(emptyTo(item.getAssignedOfficer(), "")))
+        .toList();
+
+    long unresolved = queue.stream().filter(item -> item.getStatus() == TicketStatus.UNRESOLVED).count();
+    long escalated = queue.stream().filter(item -> item.getStatus() == TicketStatus.ESCALATED_TO_OFFICER).count();
+    long underReview = queue.stream().filter(item -> item.getStatus() == TicketStatus.UNDER_OFFICER_REVIEW).count();
+    long reopened = queue.stream().filter(item -> item.getStatus() == TicketStatus.REOPENED).count();
+
+    return new OfficerQueueSummaryResponse(queue.size(), unresolved, escalated, underReview, reopened);
   }
 
   @Transactional

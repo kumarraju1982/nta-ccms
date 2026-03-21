@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout";
 import DashboardPage from "./pages/dashboard-page";
 import TicketsPage from "./pages/tickets-page";
+import OfficerWorkspacePage from "./pages/officer-workspace-page";
 import LoginPage from "./pages/login-page";
 import AdminMastersPage from "./pages/admin-masters-page";
 import { AuthProvider, useAuth } from "./state/auth-context";
@@ -32,6 +33,16 @@ function AppRoutes() {
           <ProtectedRoute>
             <Layout>
               <TicketsPage />
+            </Layout>
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/officer"
+        element={
+          <ProtectedRoute>
+            <Layout>
+              <OfficerWorkspacePage />
             </Layout>
           </ProtectedRoute>
         }
